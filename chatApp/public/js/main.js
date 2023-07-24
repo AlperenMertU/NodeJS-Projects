@@ -1,24 +1,47 @@
-const chatForm = document.getElementById("chat-form")
+const chatForm = document.getElementById('chat-form');
+const chatMessages = document.querySelector('.chat-messages');
+const roomName = document.getElementById('room-name');
+const userList = document.getElementById('users');
+
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
+
 const socket = io()
 
-socket.on("message", (message) => {
+socket.emit("join room" , {username, room})
+
+socket.on('roomUsers', ({ room, users }) => {
+  outputRoomName(room);
+  outputUsers(users);
+});
+
+socket.on('message', (message) => {
+  console.log(message);
   outputMessage(message);
-})
 
-chatForm.addEventListener("submit", e => {
-  e.preventDefault()
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+});
 
-  const msg = e.target.elements.msg.value
 
-  socket.emit("chatMessage", msg)
-})
+
+chatForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  let msg = e.target.elements.msg.value;
+
+  socket.emit('chatMessage', msg);
+
+  e.target.elements.msg.value = '';
+});
 
 const outputMessage = (message) => {
   const div = document.createElement("div")
   div.classList.add("message")
-  div.innerHTML = `<p class="meta">Brad <span>9:12pm</span></p>
+  div.innerHTML = `<p class="meta">${message.username}<span>${message.time}</span></p>
 <p class="text">
- ${message}
+ ${message.text}
 </p>`
 document.querySelector(".chat-messages").appendChild(div)
 }
