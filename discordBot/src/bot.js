@@ -1,16 +1,19 @@
-const { Client, Intents } = require('discord.js');
-require("dotenv").config();
-const client = new Client({intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });                                         
-const mySecret = process.env['TOKEN'];
- client.on("ready", () => {
- console.log(`Logged is as ${client.user.tag}!`);
+
+
+const Discord = require('discord.js');
+// const Discord = require('discord.js');
+
+// Using Intents class
+const client = new Discord.Client({ intents: [
+    Discord.GatewayIntentBits.Guilds,
+    Discord.GatewayIntentBits.GuildMessages
+  ]})
+  
+client.on('message', (msg) => {
+  // Send back a reply when the specific command has been written by a user.
+  if (msg.content === '!hello') {
+    msg.reply('Hello, World!');
+  }
 });
 
-
-client.on("message", (msg) => {
-if(msg.content === "ping"){
-msg.reply("pong");
-}
-});
-
-client.login(mySecret);
+client.login("MTEzMzM4MzIwMDI5NTYyODg3MQ.GlSy7w.Vd5UYNpaTTpASSFR13OHSGDsS0-ONQbqqpdyss")
