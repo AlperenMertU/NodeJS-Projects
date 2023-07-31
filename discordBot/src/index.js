@@ -1,5 +1,6 @@
-const { Client, GatewayIntentBits } = require("discord.js")
+require("dotenv").config()
 
+const { Client, GatewayIntentBits } = require("discord.js")
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -14,7 +15,9 @@ client.on("ready", () => {
 })
 
 client.on("messageCreate", (message) => {
-    console.log(message);
+    if (message.content === "esenlikler") {
+        message.reply("esenlikler!")
+    }
 })
 
-client.login("MTEzMzM4MzIwMDI5NTYyODg3MQ.GXIgqk.iwnDUgK7V2oZaMKcDEvLMuuIOPfhb_h7noOOOc")
+client.login(process.env.TOKEN)
